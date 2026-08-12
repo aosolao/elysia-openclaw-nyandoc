@@ -1,6 +1,12 @@
 # ============================================================================
 # OpenClaw 沙箱工作镜像
-# 基础镜像：Python 3.13.14 + Node 26.7.0，Debian 13 (trixie)
+# 支持架构：linux/amd64, linux/arm64
+# 多架构构建：
+#   docker buildx build --platform linux/amd64,linux/arm64 \
+#     -t aosolao/openclaw-sandbox:py313-node26-trixie --push .
+# 单架构构建：
+#   docker build -t aosolao/openclaw-sandbox:py313-node26-trixie .
+# 基础镜像：Python 3.13 + Node 26，Debian 13 (trixie)
 # 说明：OpenClaw 默认沙箱镜像为 debian:bookworm-slim + python3，
 #       本镜像相比默认镜像额外预装 Node 26、金融数据/爬虫/文档处理等
 #       工具链，以及 Xvfb 虚拟显示器和反检测字体，作为功能增强的
