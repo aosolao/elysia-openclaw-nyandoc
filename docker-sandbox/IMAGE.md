@@ -1,6 +1,42 @@
 # OpenClaw Sandbox Image
 
+> 版本：v1.0.0
+> 📖 [elysia-openclaw-nyandoc](https://github.com/aosolao/elysia-openclaw-nyandoc) · [CC BY-NC-SA 4.0](../LICENSE)
+
 > 📖 沙箱镜像详细文档
+
+<!-- TOC START -->
+## 目录
+
+- [📦 镜像信息](#-镜像信息)
+- [🛠️ 预装软件与工具](#️-预装软件与工具)
+  - [系统工具（apt 安装）](#系统工具apt-安装)
+  - [额外下载的工具](#额外下载的工具)
+  - [Python 运行时](#python-运行时)
+  - [Node.js 运行时](#nodejs-运行时)
+  - [Python 包（通过 uv 安装）](#python-包通过-uv-安装)
+  - [Playwright 浏览器](#playwright-浏览器)
+- [🔧 使用样例](#-使用样例)
+  - [1. 数据获取与分析](#1-数据获取与分析)
+  - [2. 网页抓取](#2-网页抓取)
+  - [3. 文件处理](#3-文件处理)
+  - [4. 命令行工具](#4-命令行工具)
+  - [5. Jenkins CLI](#5-jenkins-cli)
+- [⚠️ 注意事项](#️-注意事项)
+  - [1. 非 root 用户](#1-非-root-用户)
+  - [2. 浏览器自动化](#2-浏览器自动化)
+  - [3. 镜像源](#3-镜像源)
+  - [4. 时区](#4-时区)
+  - [5. Playwright 浏览器路径](#5-playwright-浏览器路径)
+  - [6. 无 GPU 支持](#6-无-gpu-支持)
+  - [7. Jenkins CLI](#7-jenkins-cli)
+- [🔨 自行构建](#-自行构建)
+  - [单架构构建](#单架构构建)
+  - [多架构构建](#多架构构建)
+  - [构建参数](#构建参数)
+- [📚 相关文档](#-相关文档)
+
+<!-- TOC END -->
 
 ---
 
@@ -12,7 +48,7 @@
 | **基础镜像** | `nikolaik/python-nodejs:python3.13-nodejs26` |
 | **操作系统** | Debian 13 (Trixie) |
 | **架构支持** | `linux/amd64`, `linux/arm64` |
-| **镜像大小** | 约 3.5 GB（压缩后约 1.2 GB） |
+| **镜像大小** | 约 3.5 GB（压缩后约 1.2 GB）*估算值* |
 | **运行用户** | `sandbox` (UID 501) |
 | **工作目录** | `/home/sandbox` |
 | **启动命令** | `sleep infinity` |
@@ -156,14 +192,17 @@ import pandas as pd
 df = pd.read_excel("data.xlsx")
 print(df.head())
 
-# 生成 PDF
-from fpdf import FPDF
+# 合并 PDF 文件
+from pypdf import PdfReader, PdfWriter
 
-pdf = FPDF()
-pdf.add_page()
-pdf.set_font("Arial", size=12)
-pdf.cell(200, 10, txt="Hello World!", ln=1, align="C")
-pdf.output("output.pdf")
+output = PdfWriter()
+for pdf_path in ["file1.pdf", "file2.pdf"]:
+    pdf = PdfReader(pdf_path)
+    for page in pdf.pages:
+        output.add_page(page)
+
+with open("merged.pdf", "wb") as f:
+    output.write(f)
 ```
 
 ### 4. 命令行工具
