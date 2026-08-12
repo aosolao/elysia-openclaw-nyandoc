@@ -142,9 +142,8 @@ RUN curl -fsSL --proto '=https' \
       "https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-$(dpkg --print-architecture).tar.gz" \
       -o /tmp/grafana.tar.gz \
     && tar -xzf /tmp/grafana.tar.gz -C /tmp \
-    && cp /tmp/grafana-${GRAFANA_VERSION}/bin/grafana /usr/local/bin/grafana \
-    && cp /tmp/grafana-${GRAFANA_VERSION}/bin/grafana-server /usr/local/bin/grafana-server \
-    && chmod +x /usr/local/bin/grafana* \
+    && cp /tmp/grafana-${GRAFANA_VERSION}.linux-$(dpkg --print-architecture)/grafana-${GRAFANA_VERSION}/bin/grafana /usr/local/bin/grafana \
+    && chmod +x /usr/local/bin/grafana \
     && rm -rf /tmp/grafana* \
     && grafana --version
 
