@@ -144,11 +144,12 @@ RUN curl -fsSL --proto '=https' \
 # Grafana CLI：Grafana 服务端二进制自带 cli 子命令，下载 OSS tarball 后只取二进制
 # ============================================================================
 ARG GRAFANA_VERSION=13.1.3
-RUN curl -fsSL --proto '=https' \
+RUN mkdir -p /tmp/grafana \
+    && curl -fsSL --proto '=https' \
       "https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-$(dpkg --print-architecture).tar.gz" \
       -o /tmp/grafana.tar.gz \
-    && tar -xzf /tmp/grafana.tar.gz -C /tmp \
-    && cp /tmp/grafana-${GRAFANA_VERSION}.linux-$(dpkg --print-architecture)/grafana-${GRAFANA_VERSION}/bin/grafana /usr/local/bin/grafana \
+    && tar -xzf /tmp/grafana.tar.gz -C /tmp/grafana --strip-components=1 \
+    && cp /tmp/grafana/bin/grafana /usr/local/bin/grafana \
     && chmod +x /usr/local/bin/grafana \
     && rm -rf /tmp/grafana* \
     && grafana --version
