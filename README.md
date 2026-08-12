@@ -54,6 +54,18 @@ openclaw doctor
 
 详细说明见[第 1 章](./01-installation.md)。
 
+## 沙箱镜像
+
+本仓库提供预构建的 OpenClaw 沙箱镜像，支持 **amd64** 和 **arm64** 架构：
+
+```bash
+docker pull aosolao/openclaw-sandbox:py313-node26-trixie
+```
+
+镜像基于 Debian Trixie，预装 Python 3.13、Node 26、Playwright、金融数据分析工具链等。详细说明见[第 9 章](./09-sandbox.md)。
+
+如需自行构建，Dockerfile 位于 `docker-sandbox/` 目录。
+
 ## 参与贡献
 
 欢迎提交 Issue 和 Pull Request！
