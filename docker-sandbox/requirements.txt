@@ -1,0 +1,80 @@
+# ============================================================================
+# Python 依赖清单
+# 单独成文件以便 Docker 分层缓存：仅当本文件变化时才重装 Python 包层。
+# 注意：uv 的 requirements 解析器要求每行一个包（不支持空格分隔），
+#       与 pip install 命令行的多包写法不同。
+# 未钉版本 = 每次重建拿最新，可复现性差；如需稳定，给核心包加约束
+# （如 "pandas>=2.2,<3"）。
+# ============================================================================
+
+# 基础镜像已自带 uv/pipenv/poetry，此处重装 uv 是升级到最新版
+uv
+
+# --- HTTP ---
+requests
+httpx
+aiohttp
+urllib3
+
+# --- 数据处理 ---
+pandas
+numpy
+scipy
+polars
+pyarrow
+duckdb
+
+# --- 网页解析 ---
+beautifulsoup4
+lxml
+html5lib
+
+# --- 文件处理（PyPDF2 已停止维护，用其后继 pypdf）---
+openpyxl
+xlsxwriter
+odfpy
+python-docx
+python-pptx
+Pillow
+pdfplumber
+pypdf
+
+# --- 配置格式（configparser 是标准库，无需安装）---
+pyyaml
+toml
+python-dotenv
+
+# --- 终端 / 可视化 ---
+rich
+tqdm
+click
+typer
+matplotlib
+plotly
+
+# --- 金融数据（接口变动频繁，是不稳定的主要来源）---
+yfinance
+akshare
+pandas-datareader
+
+# --- 抓取 / 自动化 ---
+selenium
+playwright
+playwright-stealth
+scrapy
+fake-useragent
+
+# --- 加密 / SSH ---
+cryptography
+paramiko
+
+# --- 时间（tzdata 提供 zoneinfo 时区数据，pandas 常用）---
+python-dateutil
+pytz
+tzdata
+
+# --- 其他 ---
+pydantic
+tenacity
+cachetools
+psutil
