@@ -51,7 +51,7 @@
 | 工作区 | `~/.openclaw/workspace`（记忆/人格） |
 | 项目目录 | `~/.openclaw/workspace/openclaw-work`（原路径软链兼容） |
 | 沙箱 | 全部会话 Docker 隔离（mode=all, scope=agent） |
-| 沙箱镜像 | `YOUR_USER/openclaw-sandbox:py313-node26-trixie` |
+| 沙箱镜像 | `aosolao/openclaw-sandbox:py313-node26-trixie` |
 
 ## 章节导航
 
