@@ -63,6 +63,7 @@
 7. [工作区与项目目录](./07-workspace.md)
 8. [日常维护与排错](./08-maintenance.md)
 9. [沙箱与隔离环境](./09-sandbox.md)
+10. [常用聊天命令速查](./10-slash-commands.md)
 
 ## 阅读建议
 
