@@ -11,8 +11,8 @@
 - [2.2 配置主模型与备用模型](#22-配置主模型与备用模型)
   - [给模型起别名（可选，方便切换）](#给模型起别名可选方便切换)
 - [2.3 配置自定义/国内提供商](#23-配置自定义国内提供商)
-  - [示例：豆包（火山方舟）](#示例豆包火山方舟)
-  - [示例：阿里百炼](#示例阿里百炼)
+  - [示例：国内提供商 A（OpenAI 兼容接口）](#示例国内提供商-aopenai-兼容接口)
+  - [示例：国内提供商 B（OpenAI 兼容接口）](#示例国内提供商-bopenai-兼容接口)
   - [提供商字段说明](#提供商字段说明)
 - [2.4 超时设置（重要，避免长任务中断）](#24-超时设置重要避免长任务中断)
 - [2.5 安全地存放 API Key（不要明文）](#25-安全地存放-api-key不要明文)
@@ -39,7 +39,7 @@
 
 ## 2.1 基本概念（小白先看）
 
-OpenClaw 自己没有模型，它把你的话转发给"大模型提供商"（豆包、百炼、OpenAI 等），拿到回复再展示给你。你需要：
+OpenClaw 自己没有模型，它把你的话转发给"大模型提供商"，拿到回复再展示给你。你需要：
 
 1. **主模型（primary）**：平时对话用的。
 2. **备用模型（fallbacks）**：主模型挂了/超时时自动顶上。
@@ -72,13 +72,13 @@ openclaw config set agents.defaults.model.fallbacks '["bailian/qwen3.7-plus"]' -
 openclaw config set agents.defaults.models.doubao/ark-code-latest.alias "doubao"
 ```
 
-之后在对话里用 `/model doubao` 就能快速切换。
+之后在对话里用 `/model <别名>` 就能快速切换。
 
 ## 2.3 配置自定义/国内提供商
 
-如果用的是 OpenAI 兼容接口（豆包、百炼、本地 vLLM 等），在 `models.providers` 里加一个提供商。
+如果用的是 OpenAI 兼容接口（国内大模型服务商、本地 vLLM 等），在 `models.providers` 里加一个提供商。
 
-### 示例：豆包（火山方舟）
+### 示例：国内提供商 A（OpenAI 兼容接口）
 
 ```bash
 openclaw config set models.providers.doubao.baseUrl "https://ark.cn-beijing.volces.com/api/plan/v3"
@@ -87,7 +87,7 @@ openclaw config set models.providers.doubao.api "openai-responses"
 
 API key 不要明文写进配置（见 2.5）。
 
-### 示例：阿里百炼
+### 示例：国内提供商 B（OpenAI 兼容接口）
 
 ```bash
 openclaw config set models.providers.bailian.baseUrl "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
@@ -109,10 +109,10 @@ openclaw config set models.providers.bailian.api "openai-completions"
 默认模型空闲超时约 120 秒，写长文档、跑复杂任务时容易触发。建议调大：
 
 ```bash
-# 豆包超时设为 300 秒
+# 提供商 A 超时设为 300 秒
 openclaw config set models.providers.doubao.timeoutSeconds 300
 
-# 百炼也设上
+# 提供商 B 也设上
 openclaw config set models.providers.bailian.timeoutSeconds 300
 ```
 
@@ -198,7 +198,7 @@ fallback 在主模型超时、报错或配额用完时自动顶上（按顺序�
 默认主模型由 `agents.defaults.model.primary` 控制。用 `config set` 改最安全（标量值，不涉及数组替换，见 [第 8 章 8.4 节](./08-maintenance.md#84-常见问题排查) 的 config patch 注意事项）：
 
 ```bash
-# 改成百炼 qwen3.8-max 为例
+# 改成某提供商的旗舰模型为例
 openclaw config set agents.defaults.model.primary "bailian/qwen3.8-max"
 
 # 备用模型链（主模型失败时依次 fallback）
@@ -246,7 +246,7 @@ openclaw config set agents.defaults.heartbeat.lightContext true
 
 ## 2.8 思考过程（Thinking / Reasoning）
 
-很多新一代模型（豆包 ark-code、Qwen3、DeepSeek V4、GLM-5 等）支持“思考”——在正式回答前先输出一段推理过程。OpenClaw 可以把这段思考以可折叠块显示在回复上方。
+很多新一代模型（国内旗舰模型、Qwen3、DeepSeek V4、GLM-5 等）支持"思考"——在正式回答前先输出一段推理过程。OpenClaw 可以把这段思考以可折叠块显示在回复上方。
 
 ### 思考等级
 
@@ -297,10 +297,10 @@ openclaw config set agents.defaults.models '{
 
 ### 让模型“支持思考”的配置
 
-模型 catalog 里需要 `reasoning: true`，OpenClaw 才会给它发送思考参数并渲染思考块。豆包 ark-code 默认就是 true；但用 OpenAI 兼容接口接入的模型（如百炼上的 Qwen3/GLM/DeepSeek）可能需要手动标记：
+模型 catalog 里需要 `reasoning: true`，OpenClaw 才会给它发送思考参数并渲染思考块。部分内置提供商的模型默认就是 true；但用 OpenAI 兼容接口接入的模型可能需要手动标记：
 
 ```bash
-# 把百炼模型的 reasoning 设为 true 并指定思考格式
+# 把该提供商模型的 reasoning 设为 true 并指定思考格式
 # Qwen3 系列需要 compat.thinkingFormat = "qwen"（发送 chat_template_kwargs.enable_thinking）
 openclaw config set models.providers.bailian.models '[
   {
@@ -321,11 +321,11 @@ openclaw config set models.providers.bailian.models '[
 
 | 模型 | 思考格式 | 说明 |
 |---|---|---|
-| 豆包 ark-code | 内置（openai-responses） | reasoning: true 即可 |
+| 提供商 A 代码模型 | 内置（openai-responses） | reasoning: true 即可 |
 | Qwen3 系列 | `compat.thinkingFormat: "qwen"` | 发送 enable_thinking 参数 |
 | DeepSeek V4 | 原生 reasoning_content | reasoning: true 即可 |
 | GLM-5.2 | 原生（off/low/high/max） | reasoning: true 即可 |
-| Claude | adaptive / 等级 | 需官方 API |
+| 闭源提供商 C | adaptive / 等级 | 需官方 API |
 
 > 注意：部分代理/套餐端点可能不支持思考参数，配置后如果 API 报错或没有思考内容，说明该端点不支持，换回普通模式即可。
 

@@ -100,7 +100,7 @@ OpenClaw 的聊天命令分三种类型：
 | `/fast auto` | 自动模式 |
 | `/fast default` | 恢复默认设置 |
 
-> **注意**：快速模式的效果取决于模型提供商。OpenAI/Codex 会映射到 `service_tier=priority`；Anthropic 会映射到 `service_tier=auto` 或 `standard_only`。
+> **注意**：快速模式的效果取决于模型提供商。部分提供商会映射到 `service_tier=priority`；另一部分会映射到 `service_tier=auto` 或 `standard_only`。
 
 ## 10.4 状态与诊断
 

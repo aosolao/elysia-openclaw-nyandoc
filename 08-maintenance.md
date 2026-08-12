@@ -81,7 +81,7 @@ journalctl --user -u openclaw-gateway -f
 - 现象：`LLM idle timeout` 或一直卡住。
 - 处理：
   1. 调大超时：`openclaw config set models.providers.<id>.timeoutSeconds 300`
-  2. 检查 API key 是否有效、额度是否用完（百炼等有周配额）。
+  2. 检查 API key 是否有效、额度是否用完（部分提供商有周配额限制）。
   3. 检查网络/代理；国内 API 确认没走代理或代理正确。
   4. 配 fallback 模型，主模型挂了自动切换。
 
@@ -347,7 +347,7 @@ openclaw backup verify <归档文件>                         # 校验已有归�
 | LanceDB | 几十 MB | 低 | 嵌入式，随 Gateway |
 | 本地 LLM（如 Ollama） | 几 GB | 推理时高 | 用本地模型才有 |
 
-如果内存紧张，embedding 可改为云端 API（百炼 embedding 很便宜），或不用时停止本地服务。
+如果内存紧张，embedding 可改为云端 API（部分大模型服务商的 embedding 很便宜），或不用时停止本地服务。
 
 ## 8.8 跨平台备忘
 

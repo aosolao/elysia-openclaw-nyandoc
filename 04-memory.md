@@ -76,8 +76,8 @@ openclaw config set plugins.slots.memory '"memory-lancedb"'
 | 方案 | 本地 | 开销 | 中文 | 推荐度 |
 |---|---|---|---|---|
 | 本地 vLLM-MLX/Ollama + bge/e5 | ✅ | 占 1-2GB 内存 | 好 | ⭐⭐⭐⭐⭐ |
-| OpenAI text-embedding-3 | ❌ 云 | 极低 | 好 | ⭐⭐⭐⭐（不介意云） |
-| 阿里百炼 text-embedding-v3 | ❌ 云 | 极低 | 很好 | ⭐⭐⭐⭐（国内） |
+| 云端 text-embedding-3 | ❌ 云 | 极低 | 好 | ⭐⭐⭐⭐（不介意云） |
+| 国内大模型服务商 Embedding API | ❌ 云 | 极低 | 很好 | ⭐⭐⭐⭐（国内） |
 | 内置 local GGUF | ✅ | 需装插件 | 一般 | ⭐⭐⭐ |
 
 ### 本地方案完整对比
@@ -105,8 +105,8 @@ OpenClaw 原生支持 3 种本地 embedding adapter，另可通过 `openai-compa
 
 **嵌入质量排名（从高到低）：**
 
-1. 🥇 OpenAI text-embedding-3-large (3072维) — 最强，多语言优异
-2. 🥈 Gemini gemini-embedding-001 (3072维) — 很强，支持多模态
+1. 🥇 某旗舰级云端 embedding (3072维) — 最强，多语言优异
+2. 🥈 某云端多模态 embedding (3072维) — 很强，支持多模态
 3. 🥉 Voyage / BAAI/bge-m3 (1024维) — 优秀，中文表现好
 4. Ollama + mxbai-embed-large (1024维) — 本地方案中最强
 5. llama.cpp GGUF embeddinggemma (300M参数) — 轻量可用，质量中等
@@ -129,7 +129,7 @@ openclaw config set plugins.entries.memory-lancedb.config.autoCapture false
 openclaw gateway restart
 ```
 
-> 维度要和模型一致：e5-large/mxbai-embed-large/bge-m3 = 1024；bge-small = 512；OpenAI text-embedding-3-small = 1536；text-embedding-3-large = 3072。
+> 维度要和模型一致：e5-large/mxbai-embed-large/bge-m3 = 1024；bge-small = 512；text-embedding-3-small = 1536；text-embedding-3-large = 3072。
 
 **第 3 步：验证**
 

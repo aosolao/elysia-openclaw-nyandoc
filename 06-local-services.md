@@ -194,7 +194,7 @@ chmod 700 ~/.openclaw/secrets/kc-read.sh
 ```bash
 security add-generic-password -s "openclaw.telegram.botToken" -w "你的bot-token" -U
 security add-generic-password -s "openclaw.gateway.auth.token" -w "你的网关token" -U
-security add-generic-password -s "openclaw.doubao.apiKey" -w "你的豆包key" -U
+security add-generic-password -s "openclaw.your-provider.apiKey" -w "你的模型API key" -U
 ```
 
 **第 3 步：在 openclaw.json 里引用**（通过命令或直接编辑）
@@ -294,7 +294,7 @@ try {
 
 > ⚠️ 不要直接改 `service-env/ai.openclaw.gateway.env`——文件头注明了"Do not edit while the gateway service is installed"，升级或重装时会被重新生成。改 `gateway-wrapper.sh` 才是持久化方案。
 
-国内 API（豆包、百炼）通常不需要代理，靠 `NO_PROXY` 排除即可。
+国内 API 通常不需要代理，靠 `NO_PROXY` 排除即可。
 
 ## 6.5 Web 搜索配置
 
@@ -307,7 +307,7 @@ try {
 | **DuckDuckGo** | 不需要 | 一般 | 实验性 HTML 抓取，免配置，可能被验证码挡 |
 | **Brave Search** | 免费额度 1000 次/月 | 好 | 结构化结果，推荐长期使用 |
 | Perplexity / Exa / Tavily | 需要 | 好 | 付费或试用额度 |
-| Gemini / Kimi / MiniMax | 需要 | 好 | 国内可用 Kimi |
+| 其他 AI 搜索引擎 | 需要 | 好 | 国内可用多种选择 |
 
 ### 方案 A：DuckDuckGo（免 key，最快上手）
 
