@@ -1,6 +1,6 @@
 # 第 10 章 · 常用聊天命令速查
 
-> 版本：v1.0.0
+> 版本：v1.0.1
 > 📖 [elysia-openclaw-nyandoc](https://github.com/aosolao/elysia-openclaw-nyandoc) · [CC BY-NC-SA 4.0](./LICENSE)
 
 
@@ -73,9 +73,11 @@ OpenClaw 的聊天命令分三种类型：
 | `minimal` | 最少思考 |
 | `low` | 轻度思考（日常推荐） |
 | `medium` | 中等思考 |
-| `high` | 深度思考 |
-| `xhigh` / `max` | 最大努力（仅部分模型支持） |
-| `adaptive` | 模型自适应（仅部分模型支持） |
+| `high` | 深度思考（最大预算） |
+| `xhigh` | 超高思考（部分模型支持） |
+| `adaptive` | 模型自适应（部分模型支持） |
+| `max` | 最大推理努力（部分模型支持） |
+| `ultra` | 最大推理 + 主动子代理编排（部分模型支持） |
 
 ### 推理内容显示（Reasoning）
 
@@ -146,6 +148,12 @@ OpenClaw 的聊天命令分三种类型：
 | `/trace on\|off` | 切换插件追踪输出 |
 | `/queue <模式>` | 管理活跃请求队列行为 |
 | `/steer <消息>` | 向正在执行的请求注入指导信息 |
+| `/btw <问题>` | 侧问：基于当前会话上下文提问，不影响后续对话 |
+| `/skill <名称> [输入]` | 运行指定技能 |
+| `/approve <id> <决定>` | 批准执行或插件审批请求 |
+| `/loop [间隔] <提示>` | 创建循环任务（owner-only） |
+| `/loop status` | 查看当前会话的循环任务 |
+| `/loop stop [名称]` | 停止循环任务 |
 
 ## 10.6 命令使用技巧
 
@@ -191,4 +199,4 @@ OpenClaw 的聊天命令分三种类型：
 在群聊中使用命令时注意：
 - `/reasoning`、`/verbose`、`/trace` 可能暴露内部信息，建议关闭
 - `/model` 切换会影响整个会话，群聊中谨慎使用
-- 大部分命令仅对 authorized senders 生效
+- 大部分命令仅对授权用户（authorized senders）生效
