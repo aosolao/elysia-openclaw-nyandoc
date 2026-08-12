@@ -124,9 +124,6 @@ Dockerfile 和 requirements.txt 在 `~/.openclaw/workspace/openclaw-work/docs/do
           network: "bridge",
           readOnlyRoot: false,
           tmpfs: ["/tmp", "/dev/shm:size=2g"],
-          binds: [
-            "/Users/YOUR_USER/.openclaw/workspace/openclaw-work:/workspace-project:rw"
-          ],
           env: {
             HTTP_PROXY: "http://host.docker.internal:6152",
             HTTPS_PROXY: "http://host.docker.internal:6152",
@@ -147,7 +144,6 @@ Dockerfile 和 requirements.txt 在 `~/.openclaw/workspace/openclaw-work/docs/do
 | `network` | `bridge` | 默认 `none` 完全无网络，金融数据接口和爬虫无法工作 |
 | `readOnlyRoot` | `false` | 先关闭以保证 pip/npm 临时写正常；稳定后可改 true 收紧 |
 | `tmpfs` | `/tmp` + `/dev/shm:2g` | Playwright/Chromium 在容器里默认 64MB /dev/shm 会崩溃，必须加大 |
-| `binds` | 项目目录挂到 `/workspace-project` | workspace（`/workspace`）是记忆和人格，项目文件单独挂载 |
 | `env.HTTP_PROXY/HTTPS_PROXY` | `http://host.docker.internal:6152` | Mac/Windows Docker Desktop/OrbStack 下容器通过此域名访问宿主机代理；Linux 原生 Docker 需额外加 `--add-host=host.docker.internal:host-gateway` |
 | `NO_PROXY` | 含私有网段 | 访问内网/自建 GitLab 等不走代理 |
 | `env.TZ` | `Asia/Shanghai` | 容器时区；镜像默认 UTC，运行时注入，不同国家用户改自己的配置即可 |
@@ -235,21 +231,22 @@ env | grep -i proxy                         # 代理变量
 date +%Z                                    # 时区（CST 或 Asia/Shanghai）
 echo $LANG                                  # 编码（C.UTF-8）
 touch /workspace/.test && rm /workspace/.test
-touch /workspace-project/.test && rm /workspace-project/.test
 ```
 
 ## 9.6 Bind mount 安全根限制
 
-OpenClaw 出于安全考虑，**只允许 bind mount 的源路径在 `~/.openclaw/workspace` 内**。它会对路径做 `realpath` 解析后二次校验——这意味着**软链方案无效**：即使你在 workspace 内建一个软链指向外部目录，OpenClaw 解析真实路径后仍会拒绝。
+默认情况下 workspace（`~/.openclaw/workspace`）会自动挂载到容器内 `/workspace`，其下所有子目录均可直接访问，**无需额外配置 bind mount**。
+
+如果你需要挂载 workspace 之外的目录，注意 OpenClaw 出于安全考虑，**只允许 bind mount 的源路径在 `~/.openclaw/workspace` 内**。它会对路径做 `realpath` 解析后二次校验——这意味着**软链方案无效**：即使你在 workspace 内建一个软链指向外部目录，OpenClaw 解析真实路径后仍会拒绝。
 
 正确做法是**把真实目录搬进 workspace，再在原位置建软链**：
 
 ```bash
 # 真实目录搬进 workspace
-mv ~/your-projects/openclaw-work ~/.openclaw/workspace/
+mv ~/your-projects/some-project ~/.openclaw/workspace/
 
 # 原位置建软链指回，保持旧路径可用
-ln -s ~/.openclaw/workspace/openclaw-work ~/your-projects/openclaw-work
+ln -s ~/.openclaw/workspace/some-project ~/your-projects/some-project
 ```
 
 这样 OpenClaw 校验时真实路径在允许根内，而你在终端里用旧路径也不受影响。
@@ -288,7 +285,7 @@ openclaw gateway restart
 - `/learn`（skill_workshop 工具被禁，因为 skills 目录只读挂载）。需要创建 skill 时，让 AI 写到 workspace 暂存目录，再手动 `mv` 到 `~/.openclaw/skills/`。
 - `openclaw` CLI（容器内未安装）。
 - 宿主机浏览器 CDP（浏览器工具走宿主机 Chrome，不经过容器）。
-- 直接访问宿主机文件系统（除了挂载进来的 `/workspace` 和 `/workspace-project`）。
+- 直接访问宿主机文件系统（除了挂载进来的 `/workspace`）。
 
 ## 9.9 常见问题
 
